@@ -37,11 +37,14 @@ val commonSettings = List(
   }
 )
 
+val Scala212 = "2.12.0-RC1"
+
 lazy val core = project.
   enablePlugins(BoilerplatePlugin).
   settings(
     commonSettings,
     name := "sjson new core",
+    crossScalaVersions += Scala212,
     libraryDependencies ++= testDependencies,
     scalacOptions ++= Seq("-feature", "-language:_", "-unchecked", "-deprecation", "-encoding", "utf8")
   )
@@ -51,6 +54,7 @@ def support(n: String) =
     dependsOn(core).
     settings(
       commonSettings,
+      crossScalaVersions := Seq("2.10.6", "2.11.8"),
       name := s"sjson-new-$n",
       libraryDependencies ++= testDependencies,
       scalacOptions ++= Seq("-feature", "-language:_", "-unchecked", "-deprecation", "-encoding", "utf8")
@@ -58,6 +62,7 @@ def support(n: String) =
 
 lazy val supportSpray = support("spray").
   settings(
+    crossScalaVersions += Scala212,
     libraryDependencies += sprayJson
   )
 
@@ -68,6 +73,7 @@ lazy val supportScalaJson = support("scalajson").
 
 lazy val supportMsgpack = support("msgpack").
   settings(
+    crossScalaVersions += Scala212,
     libraryDependencies += msgpackCore
   )
 
