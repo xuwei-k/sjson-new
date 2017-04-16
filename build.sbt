@@ -1,8 +1,8 @@
 import Dependencies._
 
 val scala210 = "2.10.6"
-val scala211 = "2.11.8"
-val scala212 = "2.12.1"
+val scala211 = "2.11.11"
+val scala212 = "2.12.2"
 
 lazy val root = (project in file(".")).
   aggregate(core, // shapeless, shapelessTest,
@@ -14,6 +14,7 @@ lazy val root = (project in file(".")).
     name := "sjson new",
     noPublish,
     inThisBuild(List(
+      resolvers += "staging" at "https://oss.sonatype.org/content/repositories/staging/",
       organization := "com.eed3si9n",
       organizationName := "eed3si9n",
       organizationHomepage := Some(url("http://eed3si9n.com/")),
@@ -24,8 +25,8 @@ lazy val root = (project in file(".")).
       ),
       version := "0.7.1",
       isSnapshot := (isSnapshot or version(_ endsWith "-SNAPSHOT")).value,
-      crossScalaVersions := Seq("2.10.6", "2.11.8", scala212),
-      scalaVersion := "2.11.8",
+      crossScalaVersions := Seq("2.10.6", "2.11.11", scala212),
+      scalaVersion := "2.11.11",
       description := "A Scala library for JSON (de)serialization",
       licenses := Seq("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt")),
       publishTo := {
