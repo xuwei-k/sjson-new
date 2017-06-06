@@ -22,6 +22,11 @@ lazy val root = (project in file(".")).
       developers := List(
         Developer("eed3si9n", "Eugene Yokota", "@eed3si9n", url("https://github.com/eed3si9n"))
       ),
+      scalacOptions in (Compile, doc) ++= {
+        val base = (baseDirectory in LocalRootProject).value.getAbsolutePath
+        val hash = sys.process.Process("git rev-parse HEAD").lines_!.head
+        Seq("-sourcepath", base, "-doc-source-url", "https://github.com/eed3si9n/sjson-new/tree/" + hash + "€{FILE_PATH}.scala")
+      },
       version := "0.7.1",
       isSnapshot := (isSnapshot or version(_ endsWith "-SNAPSHOT")).value,
       crossScalaVersions := Seq("2.10.6", "2.11.8", scala212),
