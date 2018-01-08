@@ -14,7 +14,7 @@ object Dependencies {
   lazy val jawnVersion = "0.10.4"
   lazy val jawnParser = "org.spire-math" %% "jawn-parser" % jawnVersion
   lazy val jawnSpray = "org.spire-math" %% "jawn-spray" % jawnVersion
-  lazy val lm = "org.scala-sbt" %% "librarymanagement" % "0.1.0-M12"
+  lazy val lm = "org.scala-sbt" %% "librarymanagement-core" % "1.1.2"
   // lazy val shaplessVersion = "2.3.0"
   // lazy val shapelessDependencies = Def.setting {
   //   if (scalaVersion.value startsWith "2.10.") Seq(
