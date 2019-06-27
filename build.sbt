@@ -44,7 +44,17 @@ val scalaVersionSettings = Def settings (
   scalaVersion := scala212
 )
 
-val commonSettings = scalaVersionSettings
+val commonSettings = Def.settings(
+  scalaVersionSettings,
+  unmanagedSourceDirectories in Compile += {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 12 =>
+        baseDirectory.value / "src/main/scala-2.13-"
+      case _ =>
+        baseDirectory.value / "src/main/scala-2.13+"
+    }
+  }
+)
 
 val noPublish = List(
   publish := {},
@@ -98,7 +108,7 @@ lazy val supportSpray = support("spray").
 
 lazy val supportScalaJson = support("scalajson")
   .settings(
-    libraryDependencies ++= Seq(scalaJson, jawnParser)
+    libraryDependencies ++= Seq(scalaJson, jawnParser.value)
   )
 
 lazy val supportMsgpack = support("msgpack")
@@ -117,7 +127,7 @@ lazy val benchmark = (project in file("benchmark"))
   .enablePlugins(JmhPlugin)
   .settings(
     // commonSettings, // TODO: Fix running benchmarks on all target versions
-    libraryDependencies ++= Seq(jawnSpray, lm),
+    libraryDependencies ++= Seq(jawnSpray.value, lm),
     crossScalaVersions -= scala212,
     javaOptions in (Jmh, run) ++= Seq("-Xmx1G", "-Dfile.encoding=UTF8"),
     noPublish
