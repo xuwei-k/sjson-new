@@ -1,10 +1,9 @@
 import Dependencies._
 import com.typesafe.tools.mima.core._
 
-val scala210 = "2.10.7"
 val scala211 = "2.11.12"
-val scala212 = "2.12.6"
-val scala213 = "2.13.0-M4"
+val scala212 = "2.12.8"
+val scala213 = "2.13.0"
 
 lazy val root = (project in file("."))
   .aggregate(core, // shapeless, shapelessTest,
@@ -41,11 +40,21 @@ lazy val root = (project in file("."))
 
 // WORKAROUND https://github.com/sbt/sbt/issues/3353
 val scalaVersionSettings = Def settings (
-  crossScalaVersions := Seq(scala210, scala211, scala212),
+  crossScalaVersions := Seq(scala211, scala212),
   scalaVersion := scala212
 )
 
-val commonSettings = scalaVersionSettings
+val commonSettings = Def.settings(
+  scalaVersionSettings,
+  unmanagedSourceDirectories in Compile += {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 12 =>
+        baseDirectory.value / "src/main/scala-2.13-"
+      case _ =>
+        baseDirectory.value / "src/main/scala-2.13+"
+    }
+  }
+)
 
 val noPublish = List(
   publish := {},
@@ -94,13 +103,12 @@ def support(n: String) =
 
 lazy val supportSpray = support("spray").
   settings(
-    crossScalaVersions += scala213,
     libraryDependencies += sprayJson
   )
 
 lazy val supportScalaJson = support("scalajson")
   .settings(
-    libraryDependencies ++= Seq(scalaJson, jawnParser)
+    libraryDependencies ++= Seq(scalaJson, jawnParser.value)
   )
 
 lazy val supportMsgpack = support("msgpack")
@@ -119,7 +127,7 @@ lazy val benchmark = (project in file("benchmark"))
   .enablePlugins(JmhPlugin)
   .settings(
     // commonSettings, // TODO: Fix running benchmarks on all target versions
-    libraryDependencies ++= Seq(jawnSpray, lm),
+    libraryDependencies ++= Seq(jawnSpray.value, lm),
     crossScalaVersions -= scala212,
     javaOptions in (Jmh, run) ++= Seq("-Xmx1G", "-Dfile.encoding=UTF8"),
     noPublish
