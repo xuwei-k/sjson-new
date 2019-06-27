@@ -1,7 +1,6 @@
 import Dependencies._
 import com.typesafe.tools.mima.core._
 
-val scala210 = "2.10.7"
 val scala211 = "2.11.12"
 val scala212 = "2.12.8"
 val scala213 = "2.13.0"
@@ -41,7 +40,7 @@ lazy val root = (project in file("."))
 
 // WORKAROUND https://github.com/sbt/sbt/issues/3353
 val scalaVersionSettings = Def settings (
-  crossScalaVersions := Seq(scala210, scala211, scala212),
+  crossScalaVersions := Seq(scala211, scala212),
   scalaVersion := scala212
 )
 
