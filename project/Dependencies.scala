@@ -13,12 +13,12 @@ object Dependencies {
   lazy val testDependencies = Def.setting(Seq(
     "org.specs2" %% "specs2-core" % specs2Version.value % "test",
     "org.specs2" %% "specs2-scalacheck" % specs2Version.value % "test",
-    "org.scalacheck" %% "scalacheck" % "1.14.0" % "test",
+    "org.scalacheck" %% "scalacheck" % "1.14.2" % "test",
     "org.scalatest" %% "scalatest" % "3.0.8" % "test"
   ))
   lazy val sprayJson = "io.spray" %% "spray-json" % "1.3.5"
   lazy val scalaJson = "com.eed3si9n" %% "shaded-scalajson" % "1.0.0-M4"
-  lazy val msgpackCore = "org.msgpack" % "msgpack-core" % "0.8.17"
+  lazy val msgpackCore = "org.msgpack" % "msgpack-core" % "0.8.19"
   lazy val jawnVersion = Def.setting {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, x)) if x <= 12 => "0.10.4"
