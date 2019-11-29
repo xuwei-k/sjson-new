@@ -3,11 +3,11 @@ package support.scalajson.unsafe
 
 import shaded.scalajson.ast.unsafe._
 
-import org.scalatest.FlatSpec
 
 import BasicJsonProtocol._
+import org.scalatest.flatspec.AnyFlatSpec
 
-final class LListFormatSpec extends FlatSpec {
+final class LListFormatSpec extends AnyFlatSpec {
   case class Foo(xs: Seq[String])
 
   implicit val isoLList: IsoLList[Foo] = LList.isoCurried(

@@ -17,11 +17,11 @@
 package sjsonnew
 package support.murmurhash
 
-import org.scalatest.FlatSpec
 import BUtil._
 import LList._
+import org.scalatest.flatspec.AnyFlatSpec
 
-class MurmurhashSpec extends FlatSpec with BasicJsonProtocol {
+class MurmurhashSpec extends AnyFlatSpec with BasicJsonProtocol {
   "The IntJsonFormat" should "convert an Int to an int hash" in {
     assert(Hasher.hashUnsafe[Int](1) === 1527037976)
   }

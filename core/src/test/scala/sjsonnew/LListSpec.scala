@@ -1,9 +1,9 @@
 package sjsonnew
 
-import org.scalatest.FlatSpec
 import BasicJsonProtocol._
+import org.scalatest.flatspec.AnyFlatSpec
 
-final class LListSpec extends FlatSpec {
+final class LListSpec extends AnyFlatSpec {
   private val anLList = "age" -> 23 :*: "name" -> "foo" :*: LNil
 
   behavior of s"$anLList"
