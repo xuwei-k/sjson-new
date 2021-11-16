@@ -49,13 +49,30 @@ object LList extends LListFormats {
   implicit def llistOps[L <: LList](l: L): LListOps[L] = new LListOps(l)
 }
 
-final case class LCons[A1: JsonFormat: ClassTag, A2 <: LList: JsonFormat](name: String, head: A1, tail: A2) extends LList {
+final class LCons[A1: JsonFormat: ClassTag, A2 <: LList: JsonFormat](val name: String, val head: A1, val tail: A2) extends LList with Product with Serializable with Equals {
+  override def canEqual(that: Any): Boolean = that.isInstanceOf[LCons[_, _]]
+  override def productArity: Int = 3
+  override def productElement(n: Int): Any = n match {
+    case 1 => name
+    case 2 => head
+    case 3 => tail
+  }
+  def copy[B1: JsonFormat: ClassTag, B2 <: LList: JsonFormat](name: String = name, head: B1 = head, tail: B2 = tail): LCons[B1, B2] =
+    new LCons[B1, B2](name, head, tail)
+
   def :*:[B1: JsonFormat: ClassTag](labelled: (String, B1)): B1 :*: A1 :*: A2 = LCons(labelled._1, labelled._2, this)
   override def toString: String = s"($name, $head) :*: $tail"
   override def find[B1: ClassTag](n: String): Option[B1] =
     if (name == n && implicitly[ClassTag[A1]] == implicitly[ClassTag[B1]]) Option(head match { case x: B1 @unchecked => x })
     else tail.find[B1](n)
   override def fieldNames: List[String] = name :: tail.fieldNames
+}
+
+object LCons {
+  def apply[A1: JsonFormat: ClassTag, A2 <: LList: JsonFormat](name: String, head: A1, tail: A2): LCons[A1, A2] =
+    new LCons[A1, A2](name = name, head = head, tail = tail)
+  def unapply[A1, A2 <: LList](x$0: LCons[A1, A2]): Option[(String, A1, A2)] =
+    Some((x$0.name, x$0.head, x$0.tail))
 }
 
 trait LListFormats {

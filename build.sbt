@@ -91,7 +91,7 @@ lazy val shadedJawnParser = (project in file("shaded-jawn-parser"))
   .enablePlugins(JarjarAbramsPlugin).disablePlugins(MimaPlugin)
   .settings(
     name := "shaded-jawn-parser",
-    jarjarLibraryDependency := "org.typelevel" %% "jawn-parser" % "1.0.0",
+    jarjarLibraryDependency := "org.typelevel" %% "jawn-parser" % "1.3.0",
     jarjarShadeRules += ShadeRuleBuilder.moveUnder("org.typelevel", "sjsonnew.shaded"),
   )
 

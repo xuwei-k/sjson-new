@@ -20,8 +20,7 @@ import java.lang.{ Integer => JInteger, Long => JLong, Boolean => JBoolean,
   Float => JFloat, Double => JDouble, Byte => JByte, Short => JShort,
   Character => JCharacter }
 
-trait JavaPrimitiveFormats {
-  this: PrimitiveFormats with AdditionalFormats with StandardFormats =>
+trait JavaPrimitiveFormats { self: BasicJsonProtocol =>
 
   private[this] type JF[A] = JsonFormat[A] // simple alias for reduced verbosity
 

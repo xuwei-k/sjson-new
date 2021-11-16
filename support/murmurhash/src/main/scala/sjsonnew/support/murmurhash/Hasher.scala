@@ -29,9 +29,9 @@ object Hasher extends SupportHasher[Int] {
 
   implicit val facade: BuilderFacade[Int] = FacadeImpl
   private object FacadeImpl extends SimpleBuilderFacade[Int] {
-    val jnull                 = nullHash
-    val jfalse                = falseHash
-    val jtrue                 = trueHash
+    def jnull()               = nullHash
+    def jfalse()              = falseHash
+    def jtrue()               = trueHash
     def jnumstring(s: String) = jstring(s)
     def jintstring(s: String) = jstring(s)
     def jint(i: Int)          = hashLong(i.toLong)
