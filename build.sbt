@@ -3,9 +3,10 @@ import com.typesafe.tools.mima.core._
 
 val scala212 = "2.12.12"
 val scala213 = "2.13.3"
+val scala3 = "3.1.0"
 
 ThisBuild / version := "0.9.2-SNAPSHOT"
-ThisBuild / crossScalaVersions := Seq(scala212, scala213)
+ThisBuild / crossScalaVersions := Seq(scala212, scala213, scala3)
 ThisBuild / scalaVersion := scala212
 
 lazy val root = (project in file("."))
@@ -36,7 +37,6 @@ val mimaSettings = Def settings (
 lazy val core = project
   .enablePlugins(BoilerplatePlugin)
   .settings(
-    crossScalaVersions += scala213,
     name := "sjson new core",
     libraryDependencies ++= testDependencies.value,
     scalacOptions ++= Seq("-Xfuture", "-feature", "-language:_", "-unchecked", "-deprecation", "-encoding", "utf8"),
@@ -65,6 +65,7 @@ lazy val supportSpray = support("spray").
 lazy val supportScalaJson = support("scalajson")
   .dependsOn(shadedJawnParser)
   .settings(
+    crossScalaVersions -= scala3, // TODO jarjar-abrams Scala 3 support
     libraryDependencies += scalaJson,
     mimaBinaryIssueFilters ++= Seq(
       ProblemFilters.exclude[IncompatibleMethTypeProblem]("sjsonnew.support.scalajson.unsafe.CompactPrinter.*"),
@@ -91,7 +92,7 @@ lazy val shadedJawnParser = (project in file("shaded-jawn-parser"))
   .enablePlugins(JarjarAbramsPlugin).disablePlugins(MimaPlugin)
   .settings(
     name := "shaded-jawn-parser",
-    jarjarLibraryDependency := "org.typelevel" %% "jawn-parser" % "1.0.0",
+    jarjarLibraryDependency := "org.typelevel" %% "jawn-parser" % "1.3.0",
     jarjarShadeRules += ShadeRuleBuilder.moveUnder("org.typelevel", "sjsonnew.shaded"),
   )
 
@@ -100,7 +101,7 @@ lazy val benchmark = (project in file("benchmark"))
   .enablePlugins(JmhPlugin)
   .settings(
     libraryDependencies ++= Seq(jawnSpray, lmIvy),
-    crossScalaVersions --= Seq(scala213),
+    crossScalaVersions --= Seq(scala213, scala3),
     Jmh / run / javaOptions ++= Seq("-Xmx1G", "-Dfile.encoding=UTF8"),
     publish / skip := true,
   )

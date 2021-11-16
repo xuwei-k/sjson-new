@@ -16,8 +16,7 @@
 
 package sjsonnew
 
-trait ThrowableFormats {
-  this: PrimitiveFormats with StandardFormats with CollectionFormats =>
+trait ThrowableFormats { self : BasicJsonProtocol =>
 
   private[this] type JF[A] = JsonFormat[A] // simple alias for reduced verbosity
 
